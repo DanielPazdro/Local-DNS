@@ -1,6 +1,11 @@
 [Unit]
 Description=Local DNS service, defines a mapping between user-defined addresses and IPs from the local network
-After=network-online.target
+DefaultDependencies=no
+After=systemd-sysctl.service systemd-sysusers.service
+Before=sysinit.target network.target nss-lookup.target shutdown.target initrd-switch-root.target
+Conflicts=shutdown.target initrd-switch-root.target
+Wants=nss-lookup.target
+
 
 [Service]
 Type=simple
