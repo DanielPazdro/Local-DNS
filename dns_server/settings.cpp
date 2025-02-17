@@ -12,7 +12,7 @@ std::string openConfig(std::string name) {
 
     // Check if the file is not good or cannot be opened
     if (!file.good() || !file.is_open()) {
-        filename = "/etc/local_dns/" + name;
+        filename = "/etc/local-dns/" + name;
         file.open(filename);
 
         if (!file.good() || !file.is_open()) {
@@ -132,6 +132,14 @@ void config() {
     }
     catch (const std::exception& ex) {
         std::cerr << "Error: " << ex.what() << std::endl;
+    }
+
+    if(globalSettings.timeout <= 0){
+        globalSettings.timeout = 30;
+    }
+
+    if(globalSettings.ifaceInfo.mask.length() <= 2){
+        globalSettings.ifaceInfo.mask = "255.255.255.0";
     }
 
     macToDomain = configDomains();

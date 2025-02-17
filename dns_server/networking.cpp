@@ -20,7 +20,7 @@ std::unordered_map<std::string, InterfaceInfo> getAllInterfaces() {
 
     for (struct ifaddrs* iter = ifaddr; iter != NULL; iter = iter->ifa_next) {
         if (!iter->ifa_addr) continue;
-        if (!(iter->ifa_flags & IFF_UP) || (iter->ifa_flags & IFF_LOOPBACK) || (iter->ifa_flags & IFF_NOARP)) continue;
+        if (!(iter->ifa_flags & IFF_UP) || (iter->ifa_flags & IFF_LOOPBACK) || (iter->ifa_flags & IFF_NOARP) || (iter->ifa_flags & IFF_BROADCAST)) continue;
 
         InterfaceInfo info;
 
