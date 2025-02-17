@@ -39,19 +39,3 @@ And for it to start on startup of system:
 ```sh
 $ sudo systemctl enable local-dns.service
 ```
-
-## How does this work?
-### DNS wrapping
-This project defines a custom DNS server on localhost that answers
-standard DNS queries by passing them to a real DNS server and acting as
-a proxy to that server. When it receives a DNS name ending with
-.localdns it answers with the IP assigned to the mac address defined in
-/etc/local_dns/DnsMapUser.config
-### Getting the IP of a MAC address
-The server sends one ARP ping packet to every single IP on the subnet
-specified by the user, concurrently. Another thread is constantly
-listening for the reply packets, hence if that MAC is present on the
-subnet, eventually we will receive an answer from the target IP.
-Additionally, the answers are cached consistently so that we can just
-retrieve the IP from it if the actual ARP pings were executed relatively
-recently ("relatively" is configured by the user, default is 30 days).

@@ -115,6 +115,7 @@ void config() {
     try {
         // Get json out of config
         json jsonData = json::parse(openConfig("DnsMapUserSettings.config"));
+        globalSettings.timeout = static_cast<time_t>(1 * 86400); // days to seconds
         for (auto& [key, valueRaw] : jsonData.items()) {
             if (valueRaw.is_array() && !valueRaw.empty()) {
                 std::string value = valueRaw[0];
@@ -134,13 +135,10 @@ void config() {
         std::cerr << "Error: " << ex.what() << std::endl;
     }
 
-    if(globalSettings.timeout <= 0){
-        globalSettings.timeout = 30;
-    }
 
-    if(globalSettings.ifaceInfo.mask.length() <= 2){
-        globalSettings.ifaceInfo.mask = "255.255.255.0";
-    }
+    // if(globalSettings.ifaceInfo.mask.length() <= 2){
+    //     globalSettings.ifaceInfo.mask = "255.255.255.0";
+    // }
 
     macToDomain = configDomains();
 
@@ -180,15 +178,15 @@ std::string getDnsServerRedirect(std::string dnsServer, std::string upstream_dns
     std::ifstream inputStream("/etc/resolv.conf");
     std::string nameserver_indicator = "nameserver ";
 
-    while(std::getline(inputStream, input)) {
-        std::string prefix = input.substr(0, nameserver_indicator.size());
-        if(prefix == nameserver_indicator) {
-            std::string dns = input.substr(nameserver_indicator.size());
-            if(dns != dnsServer) {
-                return dns;
-            }
-        }
-    }
+    // while(std::getline(inputStream, input)) {
+    //     std::string prefix = input.substr(0, nameserver_indicator.size());
+    //     if(prefix == nameserver_indicator) {
+    //         std::string dns = input.substr(nameserver_indicator.size());
+    //         if(dns != dnsServer) {
+    //             return dns;
+    //         }
+    //     }
+    // }
 
     return upstream_dns;
 }
